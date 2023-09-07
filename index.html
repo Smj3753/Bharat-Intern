@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple CMS</title>
+    <style>
+        /* CSS for styling the content */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .content {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple CMS</h1>
+
+    <!-- Content Area -->
+    <div class="content" id="content">
+        <!-- Content will be dynamically added here -->
+    </div>
+
+    <!-- Drag-and-Drop Interface -->
+    <div class="content">
+        <h2>Drag-and-Drop Interface</h2>
+        <div id="draggable-items">
+            <div class="draggable-item" draggable="true">Text</div>
+            <div class="draggable-item" draggable="true">Image</div>
+            <div class="draggable-item" draggable="true">Video</div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Drag-and-Drop -->
+    <script>
+        const draggableItems = document.querySelectorAll('.draggable-item');
+        const content = document.getElementById('content');
+
+        draggableItems.forEach(item => {
+            item.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', item.textContent);
+            });
+        });
+
+        content.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        content.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const data = e.dataTransfer.getData('text/plain');
+            const newItem = document.createElement('div');
+            newItem.textContent = data;
+            content.appendChild(newItem);
+        });
+    </script>
+</body>
+</html>
