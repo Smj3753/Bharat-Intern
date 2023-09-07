@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Conferencing</title>
+</head>
+<body>
+    <h1>Video Conferencing</h1>
+    
+    <!-- Local Video Stream -->
+    <video id="localVideo" autoplay muted></video>
+    
+    <!-- Remote Video Stream -->
+    <video id="remoteVideo" autoplay></video>
+    
+    <!-- Text Chat -->
+    <div>
+        <textarea id="chatBox" placeholder="Enter your message"></textarea>
+        <button id="sendMessage">Send</button>
+    </div>
+    
+    <script>
+        // JavaScript for video conferencing and chat
+        
+        // Get user media (video and audio)
+        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(function(stream) {
+            const localVideo = document.getElementById('localVideo');
+            localVideo.srcObject = stream;
+            
+            const remoteVideo = document.getElementById('remoteVideo');
+            
+            // Simple peer-to-peer connection using WebRTC
+            const peerConnection = new RTCPeerConnection();
+            
+            stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
+            
+            peerConnection.ontrack = function(event) {
+                remoteVideo.srcObject = event.streams[0];
+            };
+            
+            // Text chat functionality
+            const chatBox = document.getElementById('chatBox');
+            const sendMessageButton = document.getElementById('sendMessage');
+            
+            sendMessageButton.addEventListener('click', function() {
+                const message = chatBox.value;
+                chatBox.value = '';
+                // Send message to remote user using a signaling server (not shown here)
+                // Implementing signaling server and message exchange is a complex task
+                // In a real-world application, you would use WebSockets or other communication methods.
+            });
+        })
+        .catch(function(error) {
+            console.error('Error accessing user media:', error);
+        });
+    </script>
+</body>
+</html>
